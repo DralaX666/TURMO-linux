@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://github.com/DralaX666/TURMO-linux#readme
+    about: Installation, configuration, themes and troubleshooting
+  - name: Security policy
+    url: https://github.com/DralaX666/TURMO-linux/security/policy
+    about: Report security issues privately

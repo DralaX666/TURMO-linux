@@ -1,0 +1,17 @@
+# Local configuration and generated previews
+config.json
+preview_out.png
+fix.py
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+build/
+dist/
+*.egg-info/
+
+# Editors / OS
+.DS_Store
+*.swp

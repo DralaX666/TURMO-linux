@@ -1,0 +1,16 @@
+# Example per-user unit for a checkout in ~/Desktop/TURMO-linux.
+# Prefer tools/install-user-service.sh, which writes the real absolute paths.
+[Unit]
+Description=TURMO Smart Screen Dashboard
+
+[Service]
+Type=simple
+WorkingDirectory=%h/Desktop/TURMO-linux
+ExecStart=/usr/bin/python3 -m turmo_display.app
+Environment=PYTHONPATH=%h/Desktop/TURMO-linux
+Environment=PYTHONUNBUFFERED=1
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=default.target

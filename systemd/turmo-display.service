@@ -1,0 +1,18 @@
+[Unit]
+Description=TURMO / Turing Smart Screen BLACKBOX dashboard
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/turmo-display
+ExecStart=/opt/turmo-display/venv/bin/python -m turmo_display --config /etc/turmo-display/config.json
+Environment=PYTHONUNBUFFERED=1
+Restart=always
+RestartSec=3
+Nice=-5
+# the display and sensors are available to root; /sys and tty access
+User=root
+
+[Install]
+WantedBy=multi-user.target

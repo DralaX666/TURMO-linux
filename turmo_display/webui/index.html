@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>TURMO · control</title>
+  <script>
+    (function () {
+      try {
+        var language = localStorage.getItem("turmo.lang");
+        if (language) {
+          document.documentElement.lang = language;
+          document.documentElement.classList.add("has-lang");
+        }
+      } catch (error) {
+        /* localStorage can be unavailable in private mode */
+      }
+    })();
+  </script>
+  <link rel="icon" type="image/png" href="/icon.png">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="glow glow-a"></div>
+  <div class="glow glow-b"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">T</span>
+      <span class="brand-name">TURMO</span>
+      <span class="brand-sub">/ control</span>
+    </div>
+    <div class="top-actions">
+      <label class="lang-picker">
+        <span class="sr-only" data-i18n="language.select">Language</span>
+        <select id="language-select" aria-label="Language" data-i18n-aria="language.select">
+          <option value="en">English</option>
+          <option value="de">Deutsch</option>
+          <option value="zh">中文</option>
+          <option value="sr">Srpski</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost danger" id="stop-panel" data-i18n="app.stop">Stop control panel</button>
+      <div class="top-status">
+        <span class="status-dot" id="status-dot"></span>
+        <span id="status-text" data-i18n="status.connecting">Connecting…</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="preview-column">
+      <div class="panel preview-panel">
+        <div class="panel-head">
+          <h2 data-i18n="preview.title">Live preview</h2>
+          <span class="pill" id="preview-tag" data-i18n="preview.demo">demo</span>
+        </div>
+        <div class="device">
+          <img id="preview" src="/api/preview.png" alt="TURMO display preview">
+        </div>
+        <div class="device-meta" id="device-meta" data-i18n="preview.loading">Loading…</div>
+        <div class="meta-list">
+          <div><span data-i18n="preview.config">Configuration</span><code id="config-path">—</code></div>
+          <div><span data-i18n="preview.control">Control</span><code id="web-url">—</code></div>
+        </div>
+        <p class="hint" data-i18n="preview.hint">Preview refreshes every 2 seconds. Changes reach the display immediately and are saved to config.json.</p>
+      </div>
+    </section>
+
+    <section class="controls">
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-tab="themes" role="tab" data-i18n="tabs.theme">Theme</button>
+        <button class="tab" data-tab="display" role="tab" data-i18n="tabs.display">Display</button>
+        <button class="tab" data-tab="layout" role="tab" data-i18n="tabs.layout">Layout</button>
+        <button class="tab" data-tab="colors" role="tab" data-i18n="tabs.colors">Colors</button>
+      </div>
+
+      <div class="tab-panel active" data-panel="themes">
+        <div class="panel">
+          <div class="panel-head">
+            <h2 data-i18n="themes.title">Choose a theme</h2>
+            <span class="save-state" id="save-state"></span>
+          </div>
+          <div class="theme-grid" id="themes"></div>
+          <div class="row-between colors-head">
+            <div>
+              <strong data-i18n="themes.custom">Custom colors</strong>
+              <p class="hint" data-i18n="themes.customHint">Colors are changed in the Colors tab; overrides apply to the selected theme.</p>
+            </div>
+            <button class="btn" id="reset-colors" data-i18n="themes.reset">Restore theme colors</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" data-panel="display">
+        <div class="panel">
+          <div class="panel-head"><h2 data-i18n="sections.panels">Panels</h2></div>
+          <div id="panel-toggles"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h2 data-i18n="sections.details">Details</h2></div>
+          <div id="detail-toggles"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><h2 data-i18n="sections.tiles">Tiles</h2></div>
+          <div id="tile-toggles"></div>
+        </div>
+      </div>
+
+      <div class="tab-panel" data-panel="layout">
+        <div class="panel">
+          <div class="panel-head"><h2 data-i18n="layout.title">Layout &amp; device</h2></div>
+
+          <div class="field-grid">
+            <label class="field">
+              <span data-i18n="layout.titleField">Title</span>
+              <input type="text" id="title" maxlength="48" placeholder="BLACKBOX" autocomplete="off">
+            </label>
+            <label class="field">
+              <span data-i18n="layout.subtitle">Subtitle</span>
+              <input type="text" id="subtitle" maxlength="48" placeholder="// SYS" autocomplete="off">
+            </label>
+            <label class="field">
+              <span data-i18n="layout.footer">Footer text</span>
+              <input type="text" id="footer-text" maxlength="48" placeholder="TURMO / LINUX" autocomplete="off">
+            </label>
+            <label class="field">
+              <span><span data-i18n="layout.hostname">Hostname</span> <small data-i18n="layout.hostnameHint">empty = computer name</small></span>
+              <input type="text" id="hostname" maxlength="64" placeholder="auto" autocomplete="off">
+            </label>
+          </div>
+
+          <div class="field-grid">
+            <label class="field">
+              <span data-i18n="layout.orientation">Orientation</span>
+              <select id="orientation">
+                <option value="0" data-i18n="layout.portrait">Portrait (320 × 480)</option>
+                <option value="2" data-i18n="layout.landscape">Landscape (480 × 320)</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-label">
+              <span data-i18n="layout.brightness">Brightness</span>
+              <output id="brightness-value">85%</output>
+            </div>
+            <input type="range" id="brightness" min="0" max="100" step="1">
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-label">
+              <span data-i18n="layout.refresh">Refresh rate</span>
+              <output id="refresh-value">1.0 s</output>
+            </div>
+            <input type="range" id="refresh" min="0.2" max="10" step="0.1">
+          </div>
+
+          <p class="hint" data-i18n="layout.hint">Orientation and brightness are applied to the device immediately. Faster refresh uses more CPU.</p>
+        </div>
+      </div>
+
+      <div class="tab-panel" data-panel="colors">
+        <div class="panel">
+          <div class="panel-head">
+            <h2 data-i18n="colors.title">Theme colors</h2>
+            <span class="save-state" id="colors-state"></span>
+          </div>
+          <p class="hint" id="colors-note" data-i18n="colors.hint">The selected theme's colors are used. Changing any color saves a custom palette.</p>
+          <div class="color-grid" id="colors"></div>
+          <div class="row-between">
+            <button class="btn" id="reset-colors-2" data-i18n="colors.reset">Restore all theme colors</button>
+          </div>
+        </div>
+      </div>
+
+      <footer class="page-footer">
+        <span data-i18n="footer.left">TURMO Linux · dashboard control</span>
+        <span id="footer-status"></span>
+        <button type="button" class="btn ghost danger" id="stop-panel-bottom" data-i18n="app.stop">Stop control panel</button>
+      </footer>
+    </section>
+  </main>
+
+  <div class="language-gate" id="language-gate" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+    <div class="gate-card">
+      <div class="gate-brand">
+        <span class="brand-mark">T</span>
+        <span>TURMO</span>
+      </div>
+      <h1 id="gate-title" data-i18n="gate.title">Choose your language</h1>
+      <p data-i18n="gate.subtitle">Select the language for the control panel. You can change it later.</p>
+      <div class="language-options">
+        <button type="button" class="language-option" data-lang="en">
+          <span class="language-native">English</span>
+          <span class="language-label" data-i18n="gate.english">English</span>
+          <span class="language-code">EN</span>
+        </button>
+        <button type="button" class="language-option" data-lang="de">
+          <span class="language-native">Deutsch</span>
+          <span class="language-label" data-i18n="gate.german">German</span>
+          <span class="language-code">DE</span>
+        </button>
+        <button type="button" class="language-option" data-lang="zh">
+          <span class="language-native">中文</span>
+          <span class="language-label" data-i18n="gate.chinese">Chinese</span>
+          <span class="language-code">ZH</span>
+        </button>
+        <button type="button" class="language-option" data-lang="sr">
+          <span class="language-native">Srpski</span>
+          <span class="language-label" data-i18n="gate.serbian">Serbian</span>
+          <span class="language-code">SR</span>
+        </button>
+      </div>
+      <button type="button" class="btn primary" id="gate-continue" disabled data-i18n="gate.continue">Continue</button>
+    </div>
+  </div>
+
+  <div class="stopped-overlay" id="stopped-overlay">
+    <div class="stopped-card">
+      <div class="gate-brand"><span class="brand-mark">T</span><span>TURMO</span></div>
+      <h2 data-i18n="app.stoppedTitle">Control panel stopped</h2>
+      <p data-i18n="app.stoppedText">The display keeps running. You can close this tab.</p>
+      <button type="button" class="btn primary" id="close-tab" data-i18n="app.closeTab">Close tab</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

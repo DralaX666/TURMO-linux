@@ -1,0 +1,27 @@
+name: Feature request
+description: Suggest an idea for TURMO Linux
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the use case, not only the implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: input
+    id: hardware
+    attributes:
+      label: Display model / hardware (if relevant)
+      placeholder: "Turing Smart Screen 3.5 (rev. A)"
